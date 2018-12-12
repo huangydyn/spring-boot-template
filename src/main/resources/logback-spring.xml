@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <include resource="org/springframework/boot/logging/logback/defaults.xml"/>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>
+                %d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger %M %line - [%X{RequestId}]]
+                - %message %exception{full} %n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="logstash" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <pattern>
+                    <pattern>
+                        {
+                        "tags": ["template-server"],
+                        "server_name": "template-server",
+                        "timestamp": "%date{\"ISO8601\"}",
+                        "log_level": "%level",
+                        "thread": "%thread",
+                        "logger": "%logger",
+                        "class_name": "%class",
+                        "method_name": "%method",
+                        "line_number": "%line",
+                        "message": "%message",
+                        "exception": "%exception{full}"
+                        }
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <springProfile name="local,dev,test">
+        <root level="DEBUG">
+            <appender-ref ref="console"/>
+        </root>
+    </springProfile>
+
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="logstash"/>
+        </root>
+    </springProfile>
+
+</configuration>

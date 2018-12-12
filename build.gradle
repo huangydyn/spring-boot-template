@@ -1,0 +1,83 @@
+buildscript {
+    ext {
+        springBootVersion = '1.5.6.RELEASE'
+        queryDslVersion = '4.1.3'
+        mapstructVersion = "1.3.0.Final"
+        lombokVersion = "1.18.4"
+        springCloudVersion = "Edgware.SR5"
+    }
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven { url 'https://repository.mulesoft.org/nexus/content/repositories/public/' }
+        maven { url "http://repo.spring.io/snapshot" }
+        maven { url "http://repo.spring.io/milestone" }
+        maven { url "http://repo.spring.io/release" }
+        maven { url "http://central.maven.org/maven2" }
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+        classpath("net.ltgt.gradle:gradle-apt-plugin:0.18")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: "io.spring.dependency-management"
+apply plugin: "net.ltgt.apt"
+apply plugin: "net.ltgt.apt-idea"
+
+sourceCompatibility = JavaVersion.VERSION_1_8
+
+version = '1.0-SNAPSHOT'
+archivesBaseName = 'spring-boot-template'
+
+repositories {
+    mavenCentral()
+}
+
+test {
+    testLogging {
+        events "PASSED", "FAILED", "SKIPPED"
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+dependencies {
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-data-jpa")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    runtime("mysql:mysql-connector-java:5.1.36")
+    compile("org.apache.commons:commons-collections4:4.2")
+    compile("commons-io:commons-io:2.6")
+    compile("com.fasterxml.jackson.datatype:jackson-datatype-joda:2.9.8")
+    compile("io.springfox:springfox-swagger2:2.7.0")
+    compile("io.springfox:springfox-swagger-ui:2.7.0")
+    compile("net.logstash.logback:logstash-logback-encoder:4.11")
+    compile("org.projectlombok:lombok:${lombokVersion}")
+    compile("org.springframework.cloud:spring-cloud-starter-openfeign")
+    compile("org.mapstruct:mapstruct-jdk8:${mapstructVersion}", "org.projectlombok:lombok:${lombokVersion}")
+    compile("com.querydsl:querydsl-core:${queryDslVersion}")
+    compile("com.querydsl:querydsl-jpa:${queryDslVersion}")
+    compile("io.github.openfeign:feign-okhttp:9.5.0")
+
+    annotationProcessor(
+            "com.querydsl:querydsl-apt:${queryDslVersion}:jpa",
+            "org.hibernate.javax.persistence:hibernate-jpa-2.1-api:1.0.2.Final",
+            "javax.annotation:javax.annotation-api:1.3.2",
+            "org.projectlombok:lombok:${lombokVersion}",
+            "org.mapstruct:mapstruct-processor:${mapstructVersion}"
+    )
+
+    testCompile 'org.springframework.boot:spring-boot-starter-test'
+    testCompile("ch.vorburger.mariaDB4j:mariaDB4j:2.3.0")
+    testCompile("org.mariadb.jdbc:mariadb-java-client:2.3.0")
+}
+
