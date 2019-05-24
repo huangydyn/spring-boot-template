@@ -24,6 +24,12 @@ public class HeroesController {
         this.heroRepository = heroRepository;
     }
 
+    @GetMapping("/heroes/{id}")
+    public HeroEntity find(@PathVariable("id") String heroId) {
+        HeroEntity entity = heroRepository.findOne(heroId);
+        return entity;
+    }
+
     @DeleteMapping("/heroes/{id}")
     @Transactional
     public void deleteHero(@PathVariable("id") String heroId) {
@@ -35,11 +41,6 @@ public class HeroesController {
         return heroRepository.findAll().stream()
                 .map(MAPPER::toDomain)
                 .collect(Collectors.toList());
-    }
-
-    @GetMapping("/heroes/{id}")
-    public Hero update(@PathVariable("id") String heroId) {
-        return MAPPER.toDomain(heroRepository.findOne(heroId));
     }
 
     @PutMapping("/heroes/{id}")

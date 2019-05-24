@@ -2,12 +2,11 @@ package com.huangydyn.infustructure.entity;
 
 
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import java.util.Date;
+import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity
@@ -20,11 +19,11 @@ public class HeroEntity extends BaseEntity {
 
     private String name;
 
-    private String address;
 
-    @CreationTimestamp
-    private Date createdTime;
+    @OneToOne(mappedBy = "hero", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AddressEntity address;
 
-    @UpdateTimestamp
-    private Date updatedTime;
+    @Fetch(FetchMode.SUBSELECT)
+    @OneToMany(mappedBy = "hero", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TalentEntity> talents;
 }

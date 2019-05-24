@@ -11,8 +11,6 @@ public class Hero {
 
     private String name;
 
-    private String address;
-
     private Date createdTime;
 
     private Date updatedTime;
