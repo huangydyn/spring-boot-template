@@ -5,8 +5,7 @@
     <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>
-                %d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %highlight(%-5level) %logger %M %line - [%X{RequestId}]]
-                - %message %exception{full} %n
+                %d{dd-MM-yyyy HH:mm:ss.SSS} %magenta([%thread]) %message %n
             </pattern>
         </encoder>
     </appender>

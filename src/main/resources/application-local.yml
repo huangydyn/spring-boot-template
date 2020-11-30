@@ -3,5 +3,8 @@ spring:
     password: dev
     url: jdbc:mysql://127.0.0.1:3306/db_example
     username: root
+    druid:
+      initial-size: 1
+      max-active: 1
   jpa:
-    show-sql: true
+    show-sql: false
